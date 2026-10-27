@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Freight Tiger Dashboard</title>
+    <style>
+      :root {
+        --bg: #eaeef2;
+        --card: #fff;
+        --ink: #0f1c2b;
+        --mute: #5d6b7d;
+        --line: #dbe2ea;
+        --soft: #f3f6f9;
+        --brand: #0d9488;
+        --brand-ink: #fff;
+        --red: #d92d20;
+        --amber: #c27803;
+        --sig: #ffb020;
+        --hero1: #0b1826;
+        --hero2: #123a52;
+        --hero-ink: #f2f6fa;
+        --hero-mute: #8fa6ba;
+        --shadow:
+          0 1px 2px rgba(15, 28, 43, 0.06),
+          0 12px 32px -12px rgba(15, 28, 43, 0.22);
+        --display:
+          Bahnschrift, "DIN Alternate", "Arial Narrow", system-ui, sans-serif;
+        --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0a121b;
+          --card: #111c28;
+          --ink: #e8eef5;
+          --mute: #90a0b3;
+          --line: #22313f;
+          --soft: #0d1722;
+          --brand: #2dd4bf;
+          --brand-ink: #04211e;
+          --red: #f97066;
+          --amber: #fdb022;
+          --hero1: #050b12;
+          --hero2: #0e2c40;
+          --shadow:
+            0 1px 2px rgba(0, 0, 0, 0.4), 0 16px 36px -14px rgba(0, 0, 0, 0.7);
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font: 14px/1.5 var(--body);
+      }
+      :focus-visible {
+        outline: 2px solid var(--sig);
+        outline-offset: 2px;
+      }
+
+      /* hero */
+      .hero {
+        background: linear-gradient(135deg, var(--hero1), var(--hero2));
+        color: var(--hero-ink);
+        padding: 28px 20px 96px;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: auto 0 0 0;
+        height: 6px;
+        background: repeating-linear-gradient(
+          -45deg,
+          var(--sig) 0 14px,
+          var(--hero1) 14px 28px
+        );
+      }
+      .wrap {
+        max-width: 1120px;
+        margin: 0 auto;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font: 600 15px var(--display);
+        letter-spacing: 0.02em;
+      }
+      .logo {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        background: var(--sig);
+        color: #0b1826;
+        display: grid;
+        place-items: center;
+      }
+      .brand span {
+        color: var(--hero-mute);
+        font-weight: 400;
+      }
+      h1 {
+        font: 600 clamp(28px, 5vw, 48px)/1.08 var(--display);
+        margin: 34px 0 10px;
+        max-width: 22ch;
+        letter-spacing: -0.01em;
+        animation: rise 0.6s ease both;
+      }
+      h1 b {
+        color: var(--sig);
+        font-weight: 700;
+      }
+      .facts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 26px;
+        color: var(--hero-mute);
+        margin: 0;
+      }
+      .facts b {
+        color: var(--hero-ink);
+        font: 600 18px var(--display);
+        margin-right: 5px;
+      }
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        h1 {
+          animation: none;
+        }
+        html {
+          scroll-behavior: auto;
+        }
+      }
+
+      /* layout */
+      main {
+        margin-top: -72px;
+        padding: 0 20px 40px;
+        position: relative;
+      }
+      section {
+        background: var(--card);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 18px;
+        box-shadow: var(--shadow);
+      }
+      h2 {
+        font: 600 18px var(--display);
+        margin: 0 0 4px;
+        letter-spacing: 0.01em;
+      }
+      .sub {
+        color: var(--mute);
+        font-size: 13px;
+        margin: 0 0 14px;
+      }
+      .bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .grow {
+        flex: 1;
+      }
+      select,
+      input,
+      button,
+      a.b {
+        font: inherit;
+        padding: 8px 12px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--soft);
+        color: var(--ink);
+        text-decoration: none;
+      }
+      select,
+      input {
+        min-width: 0;
+      }
+      input {
+        width: 190px;
+      }
+      button,
+      a.b {
+        cursor: pointer;
+        font-weight: 500;
+      }
+      button:hover,
+      a.b:hover {
+        border-color: var(--brand);
+      }
+      button.p {
+        background: var(--brand);
+        color: var(--brand-ink);
+        border-color: var(--brand);
+      }
+      #route {
+        font-weight: 600;
+        min-width: 210px;
+      }
+      #err {
+        color: var(--red);
+        font-weight: 500;
+        margin: 0 0 12px;
+      }
+      #err:empty {
+        display: none;
+      }
+
+      /* legend */
+      .key {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        color: var(--mute);
+        font-size: 12px;
+      }
+      .key i {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 6px;
+        vertical-align: -1px;
+      }
+
+      /* tables */
+      .w {
+        overflow-x: auto;
+        border-radius: 10px;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th {
+        position: sticky;
+        top: 0;
+        background: var(--soft);
+        color: var(--mute);
+        font-weight: 600;
+        font-size: 12px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+      td.r {
+        white-space: normal;
+        min-width: 240px;
+        max-width: 420px;
+        color: var(--mute);
+      }
+      tr.click {
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+      tr.click:hover {
+        background: var(--soft);
+      }
+      tbody tr:last-child td {
+        border-bottom: 0;
+      }
+      td:first-child {
+        font-weight: 600;
+      }
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 10px;
+        border-radius: 99px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .tag::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+      .tag.u {
+        color: var(--red);
+        background: color-mix(in srgb, var(--red) 13%, transparent);
+      }
+      .tag.j {
+        color: var(--amber);
+        background: color-mix(in srgb, var(--amber) 15%, transparent);
+      }
+      .chg {
+        display: inline-block;
+        padding: 2px 9px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+      }
+      .up {
+        color: var(--red);
+        background: color-mix(in srgb, var(--red) 11%, transparent);
+      }
+      .dn {
+        color: var(--brand);
+        background: color-mix(in srgb, var(--brand) 13%, transparent);
+      }
+      td {
+        font-variant-numeric: tabular-nums;
+      }
+      .note {
+        color: var(--mute);
+        font-size: 12px;
+        margin: 12px 0 0;
+      }
+
+      svg {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      pre {
+        white-space: pre-wrap;
+        margin: 8px 0 0;
+        color: var(--mute);
+        background: var(--soft);
+        padding: 14px;
+        border-radius: 10px;
+        font:
+          12.5px/1.5 ui-monospace,
+          Consolas,
+          monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="wrap">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3 7h11v9H3zM14 10h4l3 3v3h-7" />
+              <circle cx="7" cy="18" r="1.6" />
+              <circle cx="17" cy="18" r="1.6" />
+            </svg>
+          </div>
+          Freight Tiger <span>Smart shipping costs</span>
+        </div>
+        <h1 id="headline">Loading your routes…</h1>
+        <p class="facts" id="facts"></p>
+      </div>
+    </header>
+
+    <main>
+      <div class="wrap">
+        <p id="err"></p>
+
+        <section id="chartBox">
+          <h2>Route cost per tonne-km</h2>
+          <p class="sub">
+            Weekly rate for one route, with next week’s forecast on the right.
+          </p>
+          <div class="bar">
+            <select id="route" aria-label="Route"></select>
+            <div class="key grow">
+              <span><i style="background: var(--red)"></i>Needs review</span>
+              <span
+                ><i style="background: var(--amber)"></i>Explained by a
+                note</span
+              >
+              <span
+                ><i
+                  style="
+                    background: var(--card);
+                    border: 2px solid var(--brand);
+                  "
+                ></i
+                >Forecast and range</span
+              >
+            </div>
+          </div>
+          <div id="chart"></div>
+        </section>
+
+        <section>
+          <h2>Next-week forecast</h2>
+          <p class="sub">Click a route to open its chart.</p>
+          <div class="bar">
+            <input
+              id="fq"
+              placeholder="Search route"
+              aria-label="Search routes"
+            />
+            <span class="grow"></span>
+            <a class="b" href="/export/forecast.xlsx">Download Excel</a>
+            <a class="b" href="/export/forecast.csv">Download CSV</a>
+          </div>
+          <div class="w">
+            <table>
+              <thead>
+                <tr>
+                  <th>Route</th>
+                  <th>Last week</th>
+                  <th>Last rate</th>
+                  <th>Forecast</th>
+                  <th>Range</th>
+                  <th>Change</th>
+                </tr>
+              </thead>
+              <tbody id="fc"></tbody>
+            </table>
+          </div>
+          <p class="note">
+            Linear trend over each route’s last 8 weekly rates. Guidance only,
+            not a guaranteed prediction.
+          </p>
+        </section>
+
+        <section>
+          <h2>Anomalies</h2>
+          <p class="sub">
+            Weeks where the rate broke from the route’s own history or from
+            similar routes.
+          </p>
+          <div class="bar">
+            <select id="st" aria-label="Status">
+              <option value="all">All</option>
+              <option value="unexplained">Unexplained</option>
+              <option value="justified">Justified</option>
+            </select>
+            <input
+              id="q"
+              placeholder="Search route"
+              aria-label="Search anomalies"
+            />
+            <span class="grow"></span>
+            <a class="b" href="/export/anomalies.xlsx">Download Excel</a>
+            <a class="b" href="/export/anomalies.csv">Download CSV</a>
+          </div>
+          <div class="w">
+            <table>
+              <thead>
+                <tr>
+                  <th>Route</th>
+                  <th>Week of</th>
+                  <th>Rate</th>
+                  <th>vs own history</th>
+                  <th>vs similar</th>
+                  <th>Status</th>
+                  <th>Note</th>
+                  <th>Reason</th>
+                </tr>
+              </thead>
+              <tbody id="anoms"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2>Email alert</h2>
+          <p class="sub">Sends the unexplained anomalies to ALERT_TO.</p>
+          <div class="bar">
+            <button onclick="alertMail(true)">Preview</button>
+            <button class="p" onclick="alertMail(false)">Send now</button>
+          </div>
+          <pre id="alertOut">
+Set the SMTP environment variables first (see src/alerts.py), then preview or send.</pre
+          >
+        </section>
+      </div>
+    </main>
+
+    <script>
+      const $ = (s) => document.querySelector(s),
+        api = (u) =>
+          fetch(u).then((r) => (r.ok ? r.json() : Promise.reject(r)));
+      const esc = (s) =>
+        String(s ?? "").replace(
+          /[&<>"]/g,
+          (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
+        );
+      let fcAll = [];
+
+      function renderFc() {
+        const t = $("#fq").value.toLowerCase(),
+          rows = fcAll
+            .filter((r) => r.route.toLowerCase().includes(t))
+            .slice(0, 15);
+        $("#fc").innerHTML =
+          rows
+            .map(
+              (r) =>
+                `<tr class="click" data-r="${esc(r.route)}"><td>${esc(r.route)}</td><td>${esc(r.last_week)}</td><td>${r.last_rate}</td><td><b>${r.forecast}</b></td><td>${r.low} to ${r.high}</td><td><span class="chg ${r.change_pct > 0 ? "up" : "dn"}">${r.change_pct > 0 ? "+" : ""}${r.change_pct}%</span></td></tr>`,
+            )
+            .join("") || `<tr><td colspan="6">No routes match.</td></tr>`;
+      }
+
+      async function loadAnoms() {
+        const a = await api(
+          `/api/anomalies?status=${$("#st").value}&q=${encodeURIComponent($("#q").value)}`,
+        );
+        $("#anoms").innerHTML =
+          a
+            .map(
+              (r) =>
+                `<tr class="click" data-r="${esc(r.route)}"><td>${esc(r.route)}</td><td>${esc(r.week_of)}</td><td>${esc(r.cost_per_tonne_km)}</td><td>${esc(r.vs_own_history)}</td><td>${esc(r.vs_similar_routes)}</td><td><span class="tag ${r.status == "unexplained" ? "u" : "j"}">${esc(r.status)}</span></td><td>${esc(r.matched_note_id)}</td><td class="r">${esc(r.reason)}</td></tr>`,
+            )
+            .join("") || `<tr><td colspan="8">No anomalies match.</td></tr>`;
+        return a;
+      }
+
+      async function drawRoute(name) {
+        const d = await api("/api/route?name=" + encodeURIComponent(name)),
+          h = d.history,
+          f = d.forecast;
+        if (!h.length) return;
+        const W = 760,
+          H = 290,
+          L = 50,
+          R = 22,
+          T = 16,
+          B = 32,
+          n = h.length + (f ? 1 : 0),
+          vals = h.map((p) => p.rate).concat(f ? [f.low, f.high] : []),
+          lo = Math.min(...vals) * 0.95,
+          hi = Math.max(...vals) * 1.05 || 1,
+          x = (i) => L + (n < 2 ? 0 : (i * (W - L - R)) / (n - 1)),
+          y = (v) => T + ((hi - v) * (H - T - B)) / (hi - lo || 1);
+        let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Cost per tonne-km for ${esc(name)}"><defs><linearGradient id="ar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--brand)" stop-opacity=".28"/><stop offset="1" stop-color="var(--brand)" stop-opacity="0"/></linearGradient></defs>`;
+        for (let k = 0; k <= 3; k++) {
+          const v = lo + ((hi - lo) * k) / 3;
+          s += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-dasharray="2 5"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--mute)">${v.toFixed(2)}</text>`;
+        }
+        const pts = h.map((p, i) => x(i) + "," + y(p.rate)).join(" ");
+        s += `<polygon fill="url(#ar)" points="${x(0)},${y(lo)} ${pts} ${x(h.length - 1)},${y(lo)}"/>`;
+        s += `<polyline fill="none" stroke="var(--brand)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" points="${pts}"/>`;
+        h.forEach((p, i) => {
+          if (p.status) {
+            const c = p.status == "unexplained" ? "var(--red)" : "var(--amber)";
+            s += `<circle cx="${x(i)}" cy="${y(p.rate)}" r="9" fill="${c}" opacity=".16"/><circle cx="${x(i)}" cy="${y(p.rate)}" r="5" fill="${c}" stroke="var(--card)" stroke-width="2"><title>${p.week}: ${p.rate} (${p.status})</title></circle>`;
+          } else {
+            s += `<circle cx="${x(i)}" cy="${y(p.rate)}" r="6" fill="transparent"><title>${p.week}: ${p.rate}</title></circle>`;
+          }
+        });
+        if (f) {
+          const i = h.length;
+          s += `<rect x="${x(i) - 9}" y="${y(f.high)}" width="18" height="${Math.max(2, y(f.low) - y(f.high))}" rx="9" fill="var(--brand)" opacity=".16"/>`;
+          s += `<line x1="${x(i - 1)}" y1="${y(h[i - 1].rate)}" x2="${x(i)}" y2="${y(f.forecast)}" stroke="var(--brand)" stroke-width="2" stroke-dasharray="5 4"/>`;
+          s += `<circle cx="${x(i)}" cy="${y(f.forecast)}" r="6" fill="var(--card)" stroke="var(--brand)" stroke-width="2.5"><title>Forecast ${f.forecast_week}: ${f.forecast} (${f.low} to ${f.high})</title></circle>`;
+        }
+        s += `<text x="${L}" y="${H - 9}" font-size="11" fill="var(--mute)">${h[0].week}</text><text x="${W - R}" y="${H - 9}" text-anchor="end" font-size="11" fill="var(--mute)">${f ? f.forecast_week + " (forecast)" : h[h.length - 1].week}</text></svg>`;
+        $("#chart").innerHTML = s;
+      }
+
+      function pick(e) {
+        const tr = e.target.closest("tr[data-r]");
+        if (!tr) return;
+        $("#route").value = tr.dataset.r;
+        drawRoute(tr.dataset.r);
+        $("#chartBox").scrollIntoView({ behavior: "smooth" });
+      }
+
+      async function alertMail(dry) {
+        if (!dry && !confirm("Send the alert email now?")) return;
+        const r = await fetch("/api/alert", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ dry_run: dry }),
+        }).then((r) => r.json());
+        $("#alertOut").textContent =
+          r.error ||
+          `${r.note}\nTo: ${r.to.join(", ") || "(none configured)"}\nSubject: ${r.subject}\n\n${r.body}`;
+      }
+
+      (async () => {
+        try {
+          const [s, routes, fc] = await Promise.all([
+            api("/api/summary"),
+            api("/api/routes"),
+            api("/api/forecast"),
+          ]);
+          $("#headline").innerHTML = s.anomalies
+            ? `<b>${esc(s.unexplained)} of ${esc(s.anomalies)}</b> flagged route-weeks have no note to explain them`
+            : "No anomalies flagged. Every route is within its usual range";
+          $("#facts").innerHTML = [
+            [s.justified, "explained by a note"],
+            [s.routes, "routes tracked"],
+            [s.forecast_week || "-", "forecast week"],
+          ]
+            .map(([v, k]) => `<span><b>${esc(v)}</b>${k}</span>`)
+            .join("");
+          $("#route").innerHTML = routes
+            .map((r) => `<option>${esc(r)}</option>`)
+            .join("");
+          fcAll = fc;
+          renderFc();
+          const a = await loadAnoms(),
+            first = a[0] ? a[0].route : routes[0];
+          if (first) {
+            $("#route").value = first;
+            drawRoute(first);
+          }
+        } catch (e) {
+          $("#headline").textContent = "Could not load your data";
+          $("#err").textContent =
+            "Run python -m src.main first, then restart the dashboard.";
+        }
+      })();
+      $("#route").onchange = (e) => drawRoute(e.target.value);
+      $("#fq").oninput = renderFc;
+      $("#st").onchange = loadAnoms;
+      $("#q").oninput = loadAnoms;
+      $("#fc").onclick = pick;
+      $("#anoms").onclick = pick;
+    </script>
+  </body>
+</html>
